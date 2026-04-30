@@ -24,7 +24,7 @@ SECRET_KEY = 'django-insecure--zmkbsz!ym&rfu--r$mo3b9@22mc15%hfrgtf#)m8e*+rn9p9i
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -80,6 +80,32 @@ DATABASES = {
     }
 }
 
+import os 
+if os.environ.get("RENDER"): 
+    # Production (Render + Railway MySQL) 
+    DATABASES = { 
+        "default": { 
+            "ENGINE": "django.db.backends.mysql", 
+            "NAME": os.environ.get("MYSQLDATABASE"), 
+            "USER": os.environ.get("MYSQLUSER"), 
+            "PASSWORD": os.environ.get("MYSQLPASSWORD"), 
+            "HOST": os.environ.get("MYSQLHOST"), 
+            "PORT": os.environ.get("MYSQLPORT", "3306"), 
+        } 
+    } 
+ 
+else: 
+    # Local development 
+    DATABASES = { 
+        "default": { 
+            "ENGINE": "django.db.backends.mysql", 
+            "NAME": "college_project", 
+            "USER": "root", 
+            "PASSWORD": "Anusha@27", 
+            "HOST": "localhost", 
+            "PORT": "3306", 
+        } 
+    } 
 
 # Password validation
 # https://docs.djangoproject.com/en/6.0/ref/settings/#auth-password-validators
@@ -116,4 +142,4 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
 STATIC_URL = 'static/'
-STATICFILES_DIRS = [BASE_DIR / 'static']
+STATICFILES_DIRS = [BASE_DIR/'static']
